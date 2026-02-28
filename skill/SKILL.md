@@ -88,7 +88,7 @@ COUNT="3" \
 ```bash
 GEMINI_IMAGE_API_KEY="你的key" \
 CONCURRENCY="3" \
-/Users/skyzizhu/.codex/skills/sky-simple-image-gen-skill/scripts/gen_multi_prompts.sh \
+./skill/scripts/gen_multi_prompts.sh \
   --prompt "未来感AI实验室，蓝色冷光，简洁科技" \
   --prompt "国风山水，水墨意境，层峦叠嶂" \
   --prompt "极简白底产品海报，现代感"
@@ -99,7 +99,7 @@ CONCURRENCY="3" \
 ```bash
 GEMINI_IMAGE_API_KEY="你的key" \
 CONCURRENCY="4" \
-/Users/skyzizhu/.codex/skills/sky-simple-image-gen-skill/scripts/gen_multi_prompts.sh \
+./skill/scripts/gen_multi_prompts.sh \
   --prompts-file /path/to/prompts.txt
 ```
 

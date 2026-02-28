@@ -8,9 +8,9 @@
 
 ## 目录结构
 
-- `SKILL.md`：技能说明与交互规则
-- `scripts/`：生成与解析脚本
-- `config/`：配置文件目录
+- `skill/SKILL.md`：技能说明与交互规则
+- `skill/scripts/`：生成与解析脚本
+- `skill/config/`：配置文件目录
 
 ## 配置说明
 
@@ -27,7 +27,7 @@ export GEMINI_IMAGE_API_KEY="你的key"
 编辑配置文件：
 
 ```
-config/prompt_image_gen.conf
+skill/config/prompt_image_gen.conf
 ```
 
 示例（请根据你的服务端点修改）：
@@ -66,7 +66,7 @@ DEBUG="0"
 
 ```bash
 GEMINI_IMAGE_API_KEY="你的key" \
-./scripts/gen_from_prompt.sh "设计一张 4:3 的科技海报，清爽留白"
+./skill/scripts/gen_from_prompt.sh "设计一张 4:3 的科技海报，清爽留白"
 ```
 
 ### 多条提示词并行
@@ -74,7 +74,7 @@ GEMINI_IMAGE_API_KEY="你的key" \
 ```bash
 GEMINI_IMAGE_API_KEY="你的key" \
 CONCURRENCY="3" \
-./scripts/gen_multi_prompts.sh \
+./skill/scripts/gen_multi_prompts.sh \
   --prompt "生成一张 8:1 的城市全景图，北京-上海-香港，4K" \
   --prompt "生成一张 16:9 的产品海报，清爽科技风" \
   --prompt "国风山水，水墨意境，层峦叠嶂"
