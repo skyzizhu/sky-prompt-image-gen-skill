@@ -60,6 +60,25 @@ DEBUG="0"
   1. `gemini-3-pro-image-preview`
   2. `gemini-3.1-flash-image-preview`
 
+## Gemini 3.1 Flash Image 支持的比例
+
+根据 Gemini API 文档，`gemini-3.1-flash-image-preview` 支持的宽高比包括：
+
+- `1:1`
+- `1:4`
+- `1:8`
+- `2:3`
+- `3:2`
+- `3:4`
+- `4:1`
+- `4:3`
+- `4:5`
+- `5:4`
+- `8:1`
+- `9:16`
+- `16:9`
+- `21:9`
+
 ## 使用方法
 
 ### 单条提示词
