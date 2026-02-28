@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_FILE="${CONFIG_FILE:-$SCRIPT_DIR/../config/simple_image_gen.conf}"
+CONFIG_FILE="${CONFIG_FILE:-$SCRIPT_DIR/../config/prompt_image_gen.conf}"
 ENV_IMAGE_SIZE="${IMAGE_SIZE-}"
 ENV_ASPECT_RATIO="${ASPECT_RATIO-}"
 

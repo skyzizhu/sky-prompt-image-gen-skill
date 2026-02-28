@@ -26,7 +26,7 @@ export GEMINI_IMAGE_API_KEY="你的key"
 编辑配置文件：
 
 ```
-config/simple_image_gen.conf
+config/prompt_image_gen.conf
 ```
 
 示例（请根据你的服务端点修改）：
@@ -47,7 +47,13 @@ CONNECT_TIMEOUT="10"
 MAX_TIME="180"
 RETRY_MAX="3"
 RETRY_DELAY="2"
+
+# Debug logging (0 or 1)
+DEBUG="0"
 ```
+
+说明：
+- **API Key 不写入配置文件**，请使用环境变量 `GEMINI_IMAGE_API_KEY`。
 
 ## 使用方法
 

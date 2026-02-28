@@ -48,7 +48,7 @@ description: 极简生图技能。当用户说“生成图片”“生图”“�
 
 默认使用配置文件：
 
-- `config/simple_image_gen.conf`
+- `config/prompt_image_gen.conf`
 
 ### Usage
 
@@ -117,7 +117,7 @@ CONCURRENCY="4" \
 4. 若用户说“多个提示词一起生图”，使用 `gen_multi_prompts.sh` 并行执行。
 5. **助手先解析提示词中的比例与清晰度信息（如 `4:3`、`16:9`、`3:4`、`1K`、`2K`、`4K` 等）。**
 6. **将解析结果与提示词组成 JSON，交由 `gen_from_prompt.sh` 处理并调用 `gen_images.sh`。**
-7. **若未解析到比例与清晰度：`gen_from_prompt.sh` 读取 `simple_image_gen.conf` 中的默认 `ASPECT_RATIO` 与 `IMAGE_SIZE`。**
+7. **若未解析到比例与清晰度：`gen_from_prompt.sh` 读取 `prompt_image_gen.conf` 中的默认 `ASPECT_RATIO` 与 `IMAGE_SIZE`。**
 8. **若提示词过于简单：由大模型先做规则化扩写（不改变核心语义），再传给脚本。**
 9. 多提示词时：对每条提示词分别进行“简洁提示词优化 + 比例/清晰度解析 + 生成 JSON + 调用生成脚本”，并逐条汇总输出结果。
 10. 生成完成后，**必须告知用户**：

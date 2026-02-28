@@ -3,5 +3,4 @@ __pycache__/
 *.pyc
 image_out/
 source/
-config/simple_image_gen.conf
 prompts_eval_*.txt
