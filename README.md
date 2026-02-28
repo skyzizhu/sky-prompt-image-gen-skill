@@ -33,7 +33,7 @@ config/prompt_image_gen.conf
 
 ```bash
 # Base URL for Gemini-compatible image endpoint
-BASE_URL="http://your-host:3000"
+BASE_URL="https://www.example.com"
 
 # Image generation model
 MODEL="gemini-3.1-flash-image-preview"
@@ -54,6 +54,7 @@ DEBUG="0"
 
 说明：
 - **API Key 不写入配置文件**，请使用环境变量 `GEMINI_IMAGE_API_KEY`。
+- 建议在提示词中明确写出“图片比例”和“清晰度/大小（如 2K/4K）”，以便精准解析与生成。
 
 ## 使用方法
 
@@ -85,5 +86,5 @@ CONCURRENCY="3" \
 
 ## 备注
 
-- 若提示词未包含比例与清晰度，则读取 `simple_image_gen.conf` 默认值。
+- 若提示词未包含比例与清晰度，则读取 `prompt_image_gen.conf` 默认值。
 - 提示词过于简单时，建议由大模型先优化后再传入脚本（流程已内置）。

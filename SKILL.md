@@ -1,13 +1,13 @@
 ---
 name: sky-prompt-image-gen-skill
-description: 极简生图技能。当用户说“生成图片”“生图”“生成一张图/多张图”时使用。用户只需要提供 PROMPT，即可调用图像 API 生成图片；支持一次生成多张。
+description: 极简生图技能。当用户说“生成图片”“生图”“生成一张图/多张图”时使用。用户只需要提供 PROMPT，即可对 PROMPT 进行优化，并可调用图像 API 生成图片；支持一次生成多张。
 ---
 
-# Sky Simple Image Gen Skill
+# Sky Prompt Image Gen Skill
 
 ## Overview
 
-这是一个极简生图 skill。默认只需要用户提供 `PROMPT`，即可调用 API 生成图片。
+这是一个极简生图 skill。默认只需要用户提供 `PROMPT`，即可对 `PROMPT` 做优化并调用 API 生成图片。
 
 支持能力：
 
@@ -154,4 +154,4 @@ CONCURRENCY="4" \
 
 ## Notes
 
-- 比例优先级：**提示词显式比例（由助手解析并传入） > `simple_image_gen.conf` 默认比例**。
+- 比例优先级：**提示词显式比例（由助手解析并传入） > `prompt_image_gen.conf` 默认比例**。
