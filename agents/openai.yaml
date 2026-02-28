@@ -1,0 +1,4 @@
+interface:
+  display_name: "Simple Image Generator"
+  short_description: "Trigger on 生成图片/生图 and generate one or multiple images from a prompt."
+  default_prompt: "Use $sky-simple-image-gen-skill when I ask 生成图片 or 生图."

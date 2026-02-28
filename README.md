@@ -1,0 +1,83 @@
+# sky-prompt-image-gen-skill
+
+一个面向“提示词驱动生图”的技能：
+- 自动解析提示词中的比例与清晰度（1K/2K/4K）
+- 提示词过于简单时进行规则化扩写（由大模型完成）
+- 将解析结果与最终提示词组成 JSON，再调用生成脚本
+
+## 目录结构
+
+- `SKILL.md`：技能说明与交互规则
+- `scripts/`：生成与解析脚本
+- `config/`：配置文件目录
+
+## 配置说明
+
+### 1. API Key
+
+在终端设置环境变量：
+
+```bash
+export GEMINI_IMAGE_API_KEY="你的key"
+```
+
+### 2. Base URL 与默认参数
+
+编辑配置文件：
+
+```
+config/simple_image_gen.conf
+```
+
+示例（请根据你的服务端点修改）：
+
+```bash
+# Base URL for Gemini-compatible image endpoint
+BASE_URL="http://your-host:3000"
+
+# Image generation model
+MODEL="gemini-3.1-flash-image-preview"
+
+# Defaults
+ASPECT_RATIO="16:9"
+IMAGE_SIZE="2K"
+
+# Network and retry
+CONNECT_TIMEOUT="10"
+MAX_TIME="180"
+RETRY_MAX="3"
+RETRY_DELAY="2"
+```
+
+## 使用方法
+
+### 单条提示词
+
+```bash
+GEMINI_IMAGE_API_KEY="你的key" \
+./scripts/gen_from_prompt.sh "设计一张 4:3 的科技海报，清爽留白"
+```
+
+### 多条提示词并行
+
+```bash
+GEMINI_IMAGE_API_KEY="你的key" \
+CONCURRENCY="3" \
+./scripts/gen_multi_prompts.sh \
+  --prompt "生成一张 8:1 的城市全景图，北京-上海-香港，4K" \
+  --prompt "生成一张 16:9 的产品海报，清爽科技风" \
+  --prompt "国风山水，水墨意境，层峦叠嶂"
+```
+
+## 输出
+
+- 图片输出目录：`image_out/YYYYMMDD/`
+- 生成过程中会输出 JSON，包含：
+  - `prompt`（原始提示词）
+  - `used_prompt`（最终提示词）
+  - `aspect_ratio` / `image_size`
+
+## 备注
+
+- 若提示词未包含比例与清晰度，则读取 `simple_image_gen.conf` 默认值。
+- 提示词过于简单时，建议由大模型先优化后再传入脚本（流程已内置）。
