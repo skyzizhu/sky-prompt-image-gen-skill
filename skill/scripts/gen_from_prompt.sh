@@ -71,4 +71,22 @@ PY
 
 export CONFIG_FILE
 
-"$SCRIPT_DIR/gen_images.sh" "$USED_PROMPT" "$ASPECT_RATIO" "$IMAGE_SIZE" "${COUNT:-1}" "${OUT:-}" "${OUT_PREFIX:-generated}"
+set +e
+gen_out="$("$SCRIPT_DIR/gen_images.sh" "$USED_PROMPT" "$ASPECT_RATIO" "$IMAGE_SIZE" "${COUNT:-1}" "${OUT:-}" "${OUT_PREFIX:-generated}" 2>&1)"
+status=$?
+set -e
+
+if [[ $status -ne 0 ]]; then
+  echo "status failed"
+  echo "$gen_out"
+  exit $status
+fi
+
+paths="$(printf '%s\n' "$gen_out" | awk '/^saved /{print $2}')"
+elapsed="$(printf '%s\n' "$gen_out" | awk '/^elapsed_seconds /{print $2}')"
+
+echo "used_prompt ${USED_PROMPT}"
+echo "aspect_ratio ${ASPECT_RATIO}"
+echo "image_size ${IMAGE_SIZE}"
+echo "image_paths ${paths}"
+echo "elapsed_seconds ${elapsed}"
