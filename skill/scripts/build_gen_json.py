@@ -31,11 +31,12 @@ def detect_ratio(text: str) -> Optional[str]:
 
 
 def detect_size(text: str) -> Optional[str]:
-    # Match 1k/2k/4k (case-insensitive), prefer first occurrence.
-    m = re.search(r"\b([124])\s*[kK]\b", text)
+    # Match 1k/2k/4k (case-insensitive), tolerate trailing Chinese/punct/spaces.
+    # Allow cases like "4k分辨率" while avoiding alphanumeric continuations like "4kg".
+    m = re.search(r"([124])\s*[kK](?![A-Za-z])", text)
     if not m:
         return None
-    return f"{m.group(1)}K"
+    return f"{m.group(1)}k"
 
 
 def is_too_simple(text: str) -> bool:
@@ -73,7 +74,9 @@ def main() -> int:
     prompt = sys.argv[1]
     original_prompt = os.environ.get("ORIGINAL_PROMPT", "")
     used_prompt_env = os.environ.get("USED_PROMPT", "")
-    config_file = os.environ.get("CONFIG_FILE", "")
+    # Always use the default config next to scripts/ (no env dependency).
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    config_file = os.path.join(script_dir, "..", "config", "prompt_image_gen.conf")
     cfg = read_config(config_file)
 
     ratio = detect_ratio(prompt)
@@ -85,7 +88,13 @@ def main() -> int:
     if not ratio:
         ratio = cfg.get("ASPECT_RATIO", "16:9")
     if not size:
-        size = cfg.get("IMAGE_SIZE", "2K")
+        size = cfg.get("IMAGE_SIZE", "2k")
+
+    # Normalize ratio to ASCII colon and size to lowercase.
+    if isinstance(ratio, str):
+        ratio = ratio.replace("：", ":")
+    if isinstance(size, str):
+        size = size.lower()
 
     optimized = False
     used_prompt = prompt
