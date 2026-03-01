@@ -2,9 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_FILE="${CONFIG_FILE:-$SCRIPT_DIR/../config/prompt_image_gen.conf}"
-ENV_IMAGE_SIZE="${IMAGE_SIZE-}"
-ENV_ASPECT_RATIO="${ASPECT_RATIO-}"
+CONFIG_FILE="$SCRIPT_DIR/../config/prompt_image_gen.conf"
 
 if [[ -f "$CONFIG_FILE" ]]; then
   # shellcheck disable=SC1090
@@ -18,9 +16,6 @@ BASE_URL="${BASE_URL:?missing BASE_URL in config}"
 MODEL="${MODEL:-gemini-3-pro-image-preview}"
 IMAGE_SIZE="${IMAGE_SIZE:-2K}"
 ASPECT_RATIO="${ASPECT_RATIO:-16:9}"
-if [[ -n "$ENV_IMAGE_SIZE" ]]; then
-  IMAGE_SIZE="$ENV_IMAGE_SIZE"
-fi
 
 CONNECT_TIMEOUT="${CONNECT_TIMEOUT:-10}"
 MAX_TIME="${MAX_TIME:-180}"
@@ -33,7 +28,16 @@ API_KEY="${GEMINI_IMAGE_API_KEY:?missing GEMINI_IMAGE_API_KEY}"
 if [[ -n "${1-}" ]]; then
   PROMPT="$1"
 else
-PROMPT="${PROMPT:?missing PROMPT}"
+  echo "missing PROMPT" >&2
+  exit 1
+fi
+
+# Optional positional overrides for aspect ratio and image size
+if [[ -n "${2-}" ]]; then
+  ASPECT_RATIO="$2"
+fi
+if [[ -n "${3-}" ]]; then
+  IMAGE_SIZE="$3"
 fi
 
 COUNT="${COUNT:-1}"
@@ -48,19 +52,12 @@ mkdir -p "$OUT_DIR"
 OUT_PREFIX="${OUT_PREFIX:-generated}"
 OUT="${OUT:-}"
 
-if [[ -n "$ENV_ASPECT_RATIO" ]]; then
-  ASPECT_RATIO="$ENV_ASPECT_RATIO"
-fi
-if [[ -n "$ENV_IMAGE_SIZE" ]]; then
-  IMAGE_SIZE="$ENV_IMAGE_SIZE"
-fi
-
 # Debuggable hint for which aspect ratio/image size is used (if provided).
-if [[ -n "$ENV_ASPECT_RATIO" ]]; then
-  echo "using_aspect_ratio ${ASPECT_RATIO} (source=env)"
+if [[ -n "${2-}" ]]; then
+  echo "using_aspect_ratio ${ASPECT_RATIO} (source=arg)"
 fi
-if [[ -n "$ENV_IMAGE_SIZE" ]]; then
-  echo "using_image_size ${IMAGE_SIZE} (source=env)"
+if [[ -n "${3-}" ]]; then
+  echo "using_image_size ${IMAGE_SIZE} (source=arg)"
 fi
 
 debug() {
@@ -224,8 +221,8 @@ PY
 
   decode_output="$(decode_to_png "$tmp_resp" "$out_path")"
   # Enforce explicit aspect ratio via center-crop if backend ignores it.
-  if [[ -n "$ENV_ASPECT_RATIO" ]]; then
-    CROP_RATIO="$ENV_ASPECT_RATIO" python - <<'PY' "$out_path"
+  if [[ -n "${2-}" ]]; then
+    CROP_RATIO="$ASPECT_RATIO" python - <<'PY' "$out_path"
 import os
 import sys
 from PIL import Image

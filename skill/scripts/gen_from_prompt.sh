@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CONFIG_FILE="${CONFIG_FILE:-$SCRIPT_DIR/../config/prompt_image_gen.conf}"
+CONFIG_FILE="$SCRIPT_DIR/../config/prompt_image_gen.conf"
 
 if [[ -z "${1-}" ]]; then
   echo "missing prompt" >&2
@@ -41,7 +41,5 @@ PY
 )"
 
 export CONFIG_FILE
-export ASPECT_RATIO
-export IMAGE_SIZE
 
-"$SCRIPT_DIR/gen_images.sh" "$USED_PROMPT"
+"$SCRIPT_DIR/gen_images.sh" "$USED_PROMPT" "$ASPECT_RATIO" "$IMAGE_SIZE"
