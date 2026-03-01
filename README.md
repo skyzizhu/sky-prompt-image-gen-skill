@@ -15,6 +15,13 @@
 
 ## 配置说明
 
+### 0. 运行依赖
+
+在使用前请确保：
+
+- 已安装 `python3`
+- 已安装 `Pillow`（用于解码并保存 PNG）：`pip install pillow`
+
 ### 1. API Key
 
 在终端设置环境变量：
