@@ -32,12 +32,11 @@ description: 极简生图技能。当用户说“生成图片”“生图”“�
 
 ## Optional Inputs
 
-- `COUNT`: 生成张数，默认 `1`
-- `ASPECT_RATIO`: 例如 `16:9`、`9:16`、`3:4`
-- `IMAGE_SIZE`: 默认 `2K`
-- `OUT`: 单张输出文件名（仅 `COUNT=1` 时生效）
-- `OUT_PREFIX`: 多图输出文件名前缀，默认 `generated`
-- `CONFIG_FILE`: 自定义配置文件路径
+- `COUNT`: 生成张数，默认 `1`（通过 `--count` 传入）
+- `ASPECT_RATIO`: 例如 `16:9`、`9:16`、`3:4`（仅通过提示词或配置文件控制）
+- `IMAGE_SIZE`: 默认 `2K`（仅通过提示词或配置文件控制）
+- `OUT`: 单张输出文件名（仅 `COUNT=1` 时生效，`--out`）
+- `OUT_PREFIX`: 多图输出文件名前缀，默认 `generated`（`--out-prefix`）
 
 ## Script
 
@@ -70,17 +69,14 @@ GEMINI_IMAGE_API_KEY="你的key" \
 
 ```bash
 GEMINI_IMAGE_API_KEY="你的key" \
-COUNT="4" \
-OUT_PREFIX="city_night" \
-./scripts/gen_from_prompt.sh "赛博朋克城市夜景，霓虹灯，电影感"
+./scripts/gen_from_prompt.sh "赛博朋克城市夜景，霓虹灯，电影感" --count 4 --out-prefix city_night
 ```
 
 带比例：
 
 ```bash
 GEMINI_IMAGE_API_KEY="你的key" \
-COUNT="3" \
-./scripts/gen_from_prompt.sh "未来感AI实验室，蓝色冷光，简洁科技"
+./scripts/gen_from_prompt.sh "未来感AI实验室，蓝色冷光，简洁科技" --count 3
 ```
 
 多提示词并行（推荐）：
@@ -127,12 +123,12 @@ CONCURRENCY="4" \
    - 最终图片路径（若失败，明确告知失败原因或失败状态）
 11. 可选：简要输出生成耗时。
 
-### 比例与清晰度解析规则（由大模型执行）
+### 比例与清晰度解析规则（脚本正则解析）
 
 - 识别文本中的比例表达：`4:3`、`16:9`、`3:4`、`9:16`、`1:1`、`2:3`、`3:2`、`8:1` 等。
 - 允许中文/英文混排与全角符号（如 `4：3`）。
 - 若出现多个比例，以**最明确**或**最靠近“比例/尺寸/画幅”描述的那一个**为准。
-- 识别清晰度表达：`1K`、`2K`、`4K`（不区分大小写）。
+- 识别清晰度表达：`1K`、`2K`、`4K`（不区分大小写），最终统一为大写 `1K/2K/4K`。
 - 若出现多个清晰度，以**最明确**或**最靠近“清晰度/分辨率/画质”描述的那一个**为准。
 - 解析结果仅用于 `ASPECT_RATIO` 与 `IMAGE_SIZE` 参数，提示词原样保留。
 

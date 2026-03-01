@@ -42,7 +42,7 @@ MODEL="gemini-3.1-flash-image-preview"
 
 # Defaults
 ASPECT_RATIO="16:9"
-IMAGE_SIZE="2K"
+IMAGE_SIZE="2K"  # use uppercase K (e.g., 1K/2K/4K)
 
 # Network and retry
 CONNECT_TIMEOUT="10"
@@ -56,7 +56,7 @@ DEBUG="0"
 
 说明：
 - **API Key 不写入配置文件**，请使用环境变量 `GEMINI_IMAGE_API_KEY`。
-- 建议在提示词中明确写出“图片比例”和“清晰度/大小（如 2K/4K）”，以便精准解析与生成。
+- 建议在提示词中明确写出“图片比例”和“清晰度/大小（如 2K/4K，K 为大写）”，以便精准解析与生成。
 - 当前生图模型支持 Google 的两个模型：
   1. `gemini-3-pro-image-preview`
   2. `gemini-3.1-flash-image-preview`

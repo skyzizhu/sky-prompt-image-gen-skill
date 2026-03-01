@@ -10,6 +10,35 @@ if [[ -z "${1-}" ]]; then
 fi
 
 PROMPT="$1"
+shift
+
+COUNT=""
+OUT=""
+OUT_PREFIX=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --count)
+      [[ -z "${2-}" ]] && { echo "Missing value for --count" >&2; exit 1; }
+      COUNT="$2"
+      shift 2
+      ;;
+    --out)
+      [[ -z "${2-}" ]] && { echo "Missing value for --out" >&2; exit 1; }
+      OUT="$2"
+      shift 2
+      ;;
+    --out-prefix)
+      [[ -z "${2-}" ]] && { echo "Missing value for --out-prefix" >&2; exit 1; }
+      OUT_PREFIX="$2"
+      shift 2
+      ;;
+    *)
+      echo "Unknown option: $1" >&2
+      exit 1
+      ;;
+  esac
+done
 
 if [[ -n "${USED_PROMPT-}" ]]; then
   export USED_PROMPT
@@ -42,4 +71,4 @@ PY
 
 export CONFIG_FILE
 
-"$SCRIPT_DIR/gen_images.sh" "$USED_PROMPT" "$ASPECT_RATIO" "$IMAGE_SIZE"
+"$SCRIPT_DIR/gen_images.sh" "$USED_PROMPT" "$ASPECT_RATIO" "$IMAGE_SIZE" "${COUNT:-1}" "${OUT:-}" "${OUT_PREFIX:-generated}"

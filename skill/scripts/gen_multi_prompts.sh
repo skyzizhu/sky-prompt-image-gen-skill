@@ -3,10 +3,10 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-CONCURRENCY="${CONCURRENCY:-2}"
-COUNT="${COUNT:-1}"
-OUT_PREFIX="${OUT_PREFIX:-batch}"
-PROMPTS_FILE="${PROMPTS_FILE:-}"
+CONCURRENCY="2"
+COUNT="1"
+OUT_PREFIX="batch"
+PROMPTS_FILE=""
 
 # Try to load user env if key is missing in non-login shells.
 if [[ -z "${GEMINI_IMAGE_API_KEY-}" ]]; then
@@ -125,24 +125,11 @@ for idx in "${!PROMPTS[@]}"; do
   prompt_index=$((idx + 1))
   prompt_text="${PROMPTS[$idx]}"
   pref="${OUT_PREFIX}_p$(printf '%02d' "$prompt_index")"
-  detected_ratio="$(PROMPT="$prompt_text" python - <<'PY'
-import os
-import re
-text = os.environ.get("PROMPT", "")
-pat = re.compile(r"(\d{1,2})\s*[:：xX]\s*(\d{1,2})")
-m = pat.search(text)
-if m:
-    print(f"{m.group(1)}:{m.group(2)}")
-PY
-)"
-
   (
     if [[ -n "${GEMINI_IMAGE_API_KEY-}" ]]; then
       export GEMINI_IMAGE_API_KEY
     fi
-    COUNT="$COUNT" \
-    OUT_PREFIX="$pref" \
-    "$SCRIPT_DIR/gen_from_prompt.sh" "$prompt_text"
+    "$SCRIPT_DIR/gen_from_prompt.sh" "$prompt_text" --count "$COUNT" --out-prefix "$pref"
   ) >"$tmp_dir/${prompt_index}.out" 2>"$tmp_dir/${prompt_index}.err" &
 
   pids+=("$!")

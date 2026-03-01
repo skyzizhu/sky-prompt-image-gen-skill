@@ -4,6 +4,9 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_FILE="$SCRIPT_DIR/../config/prompt_image_gen.conf"
 
+# Ignore any non-API env overrides; rely on config only.
+unset CONNECT_TIMEOUT MAX_TIME RETRY_MAX RETRY_DELAY DEBUG
+
 if [[ -f "$CONFIG_FILE" ]]; then
   # shellcheck disable=SC1090
   source "$CONFIG_FILE"
@@ -40,7 +43,10 @@ if [[ -n "${3-}" ]]; then
   IMAGE_SIZE="$3"
 fi
 
-COUNT="${COUNT:-1}"
+# Optional positional overrides for count/out/out_prefix (no env dependency)
+COUNT="${4-1}"
+OUT="${5-}"
+OUT_PREFIX="${6-generated}"
 if ! [[ "$COUNT" =~ ^[0-9]+$ ]] || [[ "$COUNT" -lt 1 ]]; then
   echo "COUNT must be a positive integer" >&2
   exit 1
@@ -48,9 +54,6 @@ fi
 
 OUT_DIR="image_out/$(date +%Y%m%d)"
 mkdir -p "$OUT_DIR"
-
-OUT_PREFIX="${OUT_PREFIX:-generated}"
-OUT="${OUT:-}"
 
 # Debuggable hint for which aspect ratio/image size is used (if provided).
 if [[ -n "${2-}" ]]; then

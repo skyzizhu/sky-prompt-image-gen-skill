@@ -36,7 +36,7 @@ def detect_size(text: str) -> Optional[str]:
     m = re.search(r"([124])\s*[kK](?![A-Za-z])", text)
     if not m:
         return None
-    return f"{m.group(1)}k"
+    return f"{m.group(1)}K"
 
 
 def is_too_simple(text: str) -> bool:
@@ -88,13 +88,13 @@ def main() -> int:
     if not ratio:
         ratio = cfg.get("ASPECT_RATIO", "16:9")
     if not size:
-        size = cfg.get("IMAGE_SIZE", "2k")
+        size = cfg.get("IMAGE_SIZE", "2K")
 
     # Normalize ratio to ASCII colon and size to lowercase.
     if isinstance(ratio, str):
         ratio = ratio.replace("：", ":")
     if isinstance(size, str):
-        size = size.lower()
+        size = size.upper()
 
     optimized = False
     used_prompt = prompt
